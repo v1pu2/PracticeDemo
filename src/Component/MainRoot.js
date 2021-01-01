@@ -1,30 +1,31 @@
-import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  Dimensions,
-} from 'react-native';
-import {TabView, SceneMap} from 'react-native-tab-view';
+import React from 'react';
+import {Dimensions} from 'react-native';
+import {TabView} from 'react-native-tab-view';
 import Dashboard from '../Component/Dashboard';
 import Profile from '../Component/Profile';
 const initialLayout = {width: Dimensions.get('window').width};
-function MainRoot() {
+
+function MainRoot(props) {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {key: 'dashboard', title: 'Dashboard'},
     {key: 'profile', title: 'Profile'},
   ]);
-  const renderScene = SceneMap({
-    dashboard: Dashboard,
-    profile: Profile,
-  });
+
+  console.log('in mainroot', props);
   return (
     <TabView
       navigationState={{index, routes}}
-      renderScene={renderScene}
+      renderScene={({route}) => {
+        switch (route.key) {
+          case 'dashboard':
+            return <Dashboard navigation={props.navigation} />;
+          case 'profile':
+            return <Profile navigation={props.navigation} />;
+          default:
+            return <Dashboard navigation={props.navigation} />;
+        }
+      }}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
     />

@@ -2,15 +2,16 @@ import React, {Component} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
-  StatusBar,
   TextInput,
   Button,
 } from 'react-native';
+import {generateToken, login, refresh_token} from '../Actions/AuthAction';
+import {connect} from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 
-class App extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,8 +19,19 @@ class App extends Component {
       code: '+91',
     };
   }
-  onSubmit() {
-    console.log('onsubmit');
+  async onSubmit() {
+    this.props.generateToken();
+
+    const access_token = await AsyncStorage.getItem('ACCESS_TOKEN');
+    const refresh_token = await AsyncStorage.getItem('REFRESH_TOKEN');
+
+    access_token && this.props.login(this.state.phone);
+    const error = await AsyncStorage.getItem('ERROR');
+    if (error === 401) this.props.refresh_token(refresh_token);
+
+    // if (this.props.data && this.props.data.access_token) {
+    //   this.props.login();
+    // }
     this.props.navigation.navigate('MainRoot');
   }
   render() {
@@ -41,12 +53,26 @@ class App extends Component {
             maxLength={10}
           />
         </View>
-        <Button title="submit" onPress={() => this.onSubmit()} />
+        <Button
+          title="submit"
+          onPress={() => this.onSubmit()}
+          disabled={!this.state.phone || this.state.phone.length < 10}
+        />
       </SafeAreaView>
     );
   }
 }
-export default App;
+
+const mapStateToProps = (state) => {
+  console.log('State', state);
+  return {
+    data: state,
+  };
+};
+export default connect(mapStateToProps, {generateToken, login, refresh_token})(
+  Login,
+);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
