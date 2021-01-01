@@ -1,19 +1,18 @@
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import 'react-native-gesture-handler';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import Login from './src/Component/Login';
+import MainRoot from './src/Component/MainRoot';
 
-export default class App extends Component {
-  render() {
-    return (
-      <SafeAreaView>
-        <Text>app</Text>
-      </SafeAreaView>
-    );
-  }
+const Stack = createStackNavigator();
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="MainRoot" component={MainRoot} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
