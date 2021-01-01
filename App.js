@@ -7,7 +7,7 @@ import MainRoot from './src/Component/MainRoot';
 import {createStore, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import {Provider} from 'react-redux';
-import AsyncStorage from '@react-native-community/async-storage';
+
 import {persistor, store} from './store';
 
 const Stack = createStackNavigator();
