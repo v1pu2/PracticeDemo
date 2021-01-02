@@ -8,6 +8,7 @@ const initialState = {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function (state = initialState, action) {
+  // console.log('in reducer payload', action.payload);
   switch (action.type) {
     case USER_LOGIN:
       return {
@@ -16,7 +17,7 @@ export default function (state = initialState, action) {
       };
 
     case USER_DATA:
-      console.log('Payload', action);
+      // console.log('Payload', action);
       return {
         ...state,
         user_data: action.payload,

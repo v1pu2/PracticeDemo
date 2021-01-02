@@ -36,9 +36,9 @@ export const generateToken = () => (dispatch) => {
 };
 
 export const login = (data) => async (dispatch) => {
-  console.log('In LOgin User action', data);
+  // console.log('In LOgin User action', data);
   const access_token = await AsyncStorage.getItem('ACCESS_TOKEN');
-  console.log('access_token in login action', access_token);
+  // console.log('access_token in login action', access_token);
   const headers = {
     'app-version': '1.0',
     authorization: `Bearer ${access_token}`,
@@ -62,12 +62,12 @@ export const login = (data) => async (dispatch) => {
     })
     .catch((err) => {
       AsyncStorage.setItem('ERROR', err.status);
-      console.log('error occurred', err);
+      // console.log('error occurred', err);
     });
 };
 
 export const refresh_token = (data) => async (dispatch) => {
-  console.log('In refresh_token User', data);
+  // console.log('In refresh_token User', data);
   const access_token = await AsyncStorage.getItem('ACCESS_TOKEN');
   console.log('token', access_token);
   const headers = {
@@ -84,7 +84,7 @@ export const refresh_token = (data) => async (dispatch) => {
       },
     )
     .then((result) => {
-      console.log('refresh_token', result.data);
+      // console.log('refresh_token', result.data);
       const access_token = result && result.data && result.data.access_token;
       const refresh_token = result && result.data && result.data.refresh_token;
       AsyncStorage.setItem('ACCESS_TOKEN', access_token);
@@ -96,12 +96,6 @@ export const refresh_token = (data) => async (dispatch) => {
     })
     .catch((err) => {
       AsyncStorage.setItem('ERROR', err.status);
-      console.log('error occurred', err);
+      // console.log('error occurred', err);
     });
 };
-
-// export const getuserdata= () => (dispatch) => {​​​​​​​​
-//     axios.get("/api/user/me").then((res) => {​​​​​​​​
-//
-//   }​​​​​​​​);
-// }​​​​​​​​;
