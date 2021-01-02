@@ -20,19 +20,29 @@ class Login extends Component {
     };
   }
   async onSubmit() {
+    // AsyncStorage.setItem('ACCESS_TOKEN', '');
+    // AsyncStorage.setItem('REFRESH_TOKEN', '');
     this.props.generateToken();
 
-    const access_token = await AsyncStorage.getItem('ACCESS_TOKEN');
-    const refresh_token = await AsyncStorage.getItem('REFRESH_TOKEN');
-
-    access_token && this.props.login(this.state.phone);
-    const error = await AsyncStorage.getItem('ERROR');
-    if (error === 401) this.props.refresh_token(refresh_token);
+    // const access_token = await AsyncStorage.getItem('ACCESS_TOKEN');
+    // const refresh_token = await AsyncStorage.getItem('REFRESH_TOKEN');
+    // console.log('access_token in login', access_token);
+    // if (access_token) {
+    //   this.props.login(this.state.phone);
+    //   this.props.navigation.navigate('MainRoot');
+    // } else {
+    //   console.log('in else');
+    // }
+    // const error = await AsyncStorage.getItem('ERROR');
+    // if (error === 401) {
+    //   console.log('in roor');
+    //   this.props.refresh_token(refresh_token);
+    // }
 
     // if (this.props.data && this.props.data.access_token) {
     //   this.props.login();
     // }
-    this.props.navigation.navigate('MainRoot');
+    // this.props.navigation.navigate('MainRoot');
   }
   render() {
     return (
