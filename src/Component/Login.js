@@ -7,10 +7,10 @@ import {
   TextInput,
   Button,
 } from 'react-native';
-import {generateToken, login, refresh_token} from '../Actions/AuthAction';
+import {generateToken, login, refreshToken} from '../Actions/AuthAction';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import {storeData, retrieveData} from '../helper/AsyncStorage';
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -19,30 +19,24 @@ class Login extends Component {
       code: '+91',
     };
   }
+  async componentDidMount() {
+    await AsyncStorage.getItem('ACCESS_TOKEN').then((value) => {
+      !value && this.props.generateToken();
+    });
+  }
   async onSubmit() {
-    // AsyncStorage.setItem('ACCESS_TOKEN', '');
-    // AsyncStorage.setItem('REFRESH_TOKEN', '');
-    this.props.generateToken();
+    this.props.data && console.log('in submit ', this.props);
+    const data = this.props.data;
 
-    // const access_token = await AsyncStorage.getItem('ACCESS_TOKEN');
-    // const refresh_token = await AsyncStorage.getItem('REFRESH_TOKEN');
-    // console.log('access_token in login', access_token);
-    // if (access_token) {
-    //   this.props.login(this.state.phone);
-    //   this.props.navigation.navigate('MainRoot');
-    // } else {
-    //   console.log('in else');
-    // }
-    // const error = await AsyncStorage.getItem('ERROR');
-    // if (error === 401) {
-    //   console.log('in roor');
-    //   this.props.refresh_token(refresh_token);
-    // }
+    AsyncStorage.setItem('ACCESS_TOKEN', data && data.access_token);
+    AsyncStorage.setItem('REFRESH_TOKEN', data && data.refresh_token);
 
-    // if (this.props.data && this.props.data.access_token) {
-    //   this.props.login();
-    // }
-    // this.props.navigation.navigate('MainRoot');
+    this.props.login(this.state.phone, data && data.access_token);
+    if (data && data.err === 401) {
+      this.props.refreshToken();
+    } else {
+      this.props.navigation.navigate('MainRoot');
+    }
   }
   render() {
     return (
@@ -74,12 +68,12 @@ class Login extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('State', state);
+  console.log('State', state.apiReducer.user_data);
   return {
-    data: state,
+    data: state.apiReducer.user_data,
   };
 };
-export default connect(mapStateToProps, {generateToken, login, refresh_token})(
+export default connect(mapStateToProps, {generateToken, login, refreshToken})(
   Login,
 );
 

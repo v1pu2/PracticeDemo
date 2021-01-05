@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {SafeAreaView, StyleSheet, Button, View, Text} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import {storeData, retrieveData} from '../helper/AsyncStorage';
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -8,9 +9,8 @@ class Profile extends Component {
   }
 
   logOut() {
-    console.log('logout');
-    AsyncStorage.setItem('ACCESS_TOKEN', '');
-    AsyncStorage.setItem('REFRESH_TOKEN', '');
+    storeData('ACCESS_TOKEN', '');
+    storeData('REFRESH_TOKEN', '');
     this.props.navigation.navigate('Login');
   }
   render() {
