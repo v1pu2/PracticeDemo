@@ -11,8 +11,7 @@ function MainRoot(props) {
     {key: 'dashboard', title: 'Dashboard'},
     {key: 'profile', title: 'Profile'},
   ]);
-
-  console.log('in mainroot', props);
+  console.log('props in mainRoot', props);
   return (
     <TabView
       navigationState={{index, routes}}

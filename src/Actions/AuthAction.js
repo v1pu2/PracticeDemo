@@ -19,14 +19,43 @@ export const generateToken = () => (dispatch) => {
     )
     .then((result) => {
       console.log('generateToken action', result.data);
-      const access_token = result && result.data && result.data.access_token;
-      const refresh_token = result && result.data && result.data.refresh_token;
-      AsyncStorage.setItem('ACCESS_TOKEN', access_token);
-      AsyncStorage.setItem('REFRESH_TOKEN', refresh_token);
-      console.log('access token in gen act', access_token);
-      console.log('refresh_token in gen act', refresh_token);
+
       dispatch({
         type: USER_DATA,
+        payload: result.data,
+      });
+    })
+    .catch((err) => {
+      console.log('error occurred', err);
+      dispatch({
+        type: USER_DATA,
+        payload: result.data,
+      });
+    });
+};
+
+export const login = (phone, token) => (dispatch) => {
+  console.log('In LOgin User action', phone, token);
+
+  // console.log('access_token in login action', access_token);
+  const headers = {
+    'app-version': '1.0',
+    authorization: `Bearer ${token}`,
+    'content-type': 'application/json',
+  };
+  axios
+    .post(
+      'https://evermed.in/rest/V1/vibcare/customer/login',
+      {mobile_no: phone},
+      {
+        headers,
+      },
+    )
+    .then((result) => {
+      console.log('result In LOgin User action', result.data);
+
+      dispatch({
+        type: USER_LOGIN,
         payload: result.data,
       });
     })
@@ -35,67 +64,28 @@ export const generateToken = () => (dispatch) => {
     });
 };
 
-export const login = (data) => async (dispatch) => {
-  // console.log('In LOgin User action', data);
-  const access_token = await AsyncStorage.getItem('ACCESS_TOKEN');
-  // console.log('access_token in login action', access_token);
-  const headers = {
-    'app-version': '1.0',
-    authorization: `Bearer ${access_token}`,
-    'content-type': 'application/json',
-  };
-  axios
-    .post(
-      'https://evermed.in/rest/V1/vibcare/customer/login',
-      {mobile_no: data},
-      {
-        headers,
-      },
-    )
-    .then((result) => {
-      console.log('In LOgin User', result.data);
-
-      dispatch({
-        type: USER_LOGIN,
-        payload: result.data,
-      });
-    })
-    .catch((err) => {
-      AsyncStorage.setItem('ERROR', err.status);
-      // console.log('error occurred', err);
-    });
-};
-
-export const refresh_token = (data) => async (dispatch) => {
-  // console.log('In refresh_token User', data);
-  const access_token = await AsyncStorage.getItem('ACCESS_TOKEN');
-  console.log('token', access_token);
-  const headers = {
-    'app-version': '1.0',
-    authorization: `Bearer ${access_token}`,
-    'content-type': 'application/json',
-  };
+export const refreshToken = (token) => (dispatch) => {
+  // const headers = {
+  //   'app-version': '1.0',
+  //   authorization: `Bearer ${token}`,
+  //   'content-type': 'application/json',
+  // };
   axios
     .post(
       'https://evermed.in/rest/V1/vibcare/customer/refreshtoken',
-      {refresh_token: data},
-      {
-        headers,
-      },
+      {refresh_token: token},
+      // {
+      //   headers,
+      // },
     )
     .then((result) => {
-      // console.log('refresh_token', result.data);
-      const access_token = result && result.data && result.data.access_token;
-      const refresh_token = result && result.data && result.data.refresh_token;
-      AsyncStorage.setItem('ACCESS_TOKEN', access_token);
-      AsyncStorage.setItem('REFRESH_TOKEN', refresh_token);
+      console.log('refresh_token action', result.data);
       dispatch({
         type: USER_DATA,
         payload: result.data,
       });
     })
     .catch((err) => {
-      AsyncStorage.setItem('ERROR', err.status);
-      // console.log('error occurred', err);
+      console.log('error occurred', err);
     });
 };
